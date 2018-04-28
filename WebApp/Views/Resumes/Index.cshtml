@@ -1,0 +1,300 @@
+﻿@model WebApp.Models.ViewModel.ResumeViewModel
+@using WebApp.Models.Enums
+
+@{
+    ViewData["Title"] = "Resume";
+}
+<link rel="stylesheet" href="/css/Resume.css" />
+@*<body style="background-color:#C0C0C0">*@
+    <div class="A4">
+
+        <h2>Resume</h2>
+        <hr />
+        <div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <span class="Title">Personal Information</span> <a asp-action="Edit" asp-route-id="@Model.Resume.ResumeId">Edit</a>
+
+                    <dl class="dl-horizontal-resume">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Resume.Name)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Resume.Name)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Resume.DateOfBirth)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Resume.DateOfBirth)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Resume.Address)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Resume.Address)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Resume.Email)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Resume.Email)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Resume.Phone)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Resume.Phone)
+                        </dd>
+                    </dl>
+
+                </div>
+                <div class="col-sm-6">
+                    @if (Model.Resume.Picture == "noPic.jpg" || Model.Resume.Picture == null)
+                    {
+                        <img src="~/images/noPic.jpg" height="230" width="230" style="border-radius:50%"/>
+                        <form asp-controller="Resumes" asp-action="UploadFile" method="post"
+                              enctype="multipart/form-data">
+
+                            <input type="file" name="file" id="fileinput" accept="image/*" />
+                            <p class="text-danger img-validation"></p>
+                            <input type="hidden" asp-for="Resume.ResumeId" name="ResumeId" />
+                            <button type="submit" id="submitFile">Add picture</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <img src="~/images/@Html.DisplayFor(model => model.Resume.Picture)" height="230" width="230" style="border-radius:50%"/>
+
+                    }
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <span class="Title">Academic achievements</span>
+
+        @foreach (var item in Model.Resume.Academics)
+        {
+            <div class="row">
+                <div class="col-sm-3 Leftbar">
+                    @Html.DisplayFor(modelItem => item.StartToEndDate)
+                </div>
+                <div class="col-sm-7">
+                    <span style="font-weight:bold;"> @Html.DisplayFor(modelItem => item.StudyName)</span><br />
+                    @Html.DisplayFor(modelItem => item.School).
+                    @Html.DisplayFor(modelItem => item.StudyType)
+                </div>
+                <div class="col-sm-2">
+                    <a asp-action="Delete" asp-controller="Academics" asp-route-id="@item.ID">Delete</a>
+                    <a asp-action="Edit" asp-controller="Academics" asp-route-id="@item.ID"> Edit </a>
+                </div>
+
+            </div>
+
+
+        }
+            <div id="NewAcademic" hidden="hidden">
+                <br />
+                <span class="Title">Add new Academic</span>
+                <div class="row">
+                    <div class="col-md-4">
+                        <form method="post" asp-action="CreateAcademic" asp-controller="Resumes" asp-route-id="@Model.Resume.ResumeId">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Academics.StudyType" class="control-label"></label><br />
+                                <select asp-for="Academics.StudyType" asp-items="Html.GetEnumSelectList<StudyType>()" name="StudyType" size="3">
+                                    <option selected="selected" value="">Please select</option>
+                                </select>
+                                <span asp-validation-for="Academics.StudyType" name="StudyType" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Academics.StudyName" class="control-label"></label>
+                                <input asp-for="Academics.StudyName" name="StudyName" class="form-control" />
+                                <span asp-validation-for="Academics.StudyName" name="StudyName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Academics.School" class="control-label"></label>
+                                <input asp-for="Academics.School" name="School" class="form-control" />
+                                <span asp-validation-for="Academics.School" name="School" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Academics.StartDate" class="control-label"></label>
+                                <input asp-for="Academics.StartDate" name="StartDate" class="form-control" />
+                                <span asp-validation-for="Academics.StartDate" name="StartDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Academics.EndDate" class="control-label"></label>
+                                <input asp-for="Academics.EndDate" name="EndDate" class="form-control" />
+                                <span asp-validation-for="Academics.EndDate" name="EndDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Add new" class="btn btn-default" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+        <button id="AddAcademic">Add new entry</button>
+        <hr />
+        <span class="Title">Work experience</span>
+
+
+        @foreach (var item in Model.Resume.Jobs)
+        {
+            <div class="row">
+                <div class="col-sm-3 Leftbar">
+                    @Html.DisplayFor(modelItem => item.StartToEndDate)
+                </div>
+                <div class="col-sm-9">
+                    <span style="font-weight:bold">@Html.DisplayFor(modelItem => item.CompanyName)</span>. @Html.DisplayFor(modelItem => item.AdditionalInformation)
+                </div>
+                <div class="col-sm-4 col-md-offset-3">
+                    <a asp-action="Delete" asp-controller="Jobs" asp-route-id="@item.ID">Delete</a>
+                    <a asp-action="Edit" asp-controller="Jobs" asp-route-id="@item.ID"> Edit </a>
+                </div>
+            </div>
+        }
+
+        <div id="NewJob" hidden="hidden">
+            <span class="Title"> Add new Job</span>
+                <form method="post" asp-action="CreateJob" asp-controller="Resumes" asp-route-id="@Model.Resume.ResumeId">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Jobs.CompanyName" class="control-label"></label>
+                        <input asp-for="Jobs.CompanyName" name="CompanyName" class="form-control" />
+                        <span asp-validation-for="Jobs.CompanyName" data-valmsg-for="CompanyName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Jobs.AdditionalInformation" class="control-label"></label>
+                        <input asp-for="Jobs.AdditionalInformation" name="AdditionalInformation" class="form-control" />
+                        <span asp-validation-for="Jobs.AdditionalInformation" data-valmsg-for="AdditionalInformation" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Jobs.StartDate" class="control-label"></label>
+                        <input asp-for="Jobs.StartDate" name="StartDate" class="form-control" />
+                        <span asp-validation-for="Jobs.StartDate" name="StartDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Jobs.EndDate" class="control-label"></label>
+                        <input asp-for="Jobs.EndDate" name="EndDate" class="form-control" />
+                        <span asp-validation-for="Jobs.EndDate" name="EndDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Add new" class="btn btn-default" />
+                    </div>
+
+
+                </form>
+
+</div>
+
+
+        <button id="AddJob">Add new entry</button>
+
+
+
+        <hr />
+        <span class="Title">additional information</span>
+        @foreach (var item in Model.Resume.Additionals)
+        {
+            <div class="row">
+                <div class="col-sm-3 Leftbar">
+                    @Html.DisplayFor(modelItem => item.AdditionalTitle)
+                </div>
+                <div class="col-sm-7">
+                    @Html.DisplayFor(modelItem => item.AdditionalValue)
+                </div>
+                <div class="col-sm-2">
+                    <a asp-action="Delete" asp-controller="Additionals" asp-route-id="@item.AdditionalId">Delete</a>
+                    <a asp-action="Edit" asp-controller="Additionals" asp-route-id="@item.AdditionalId"> Edit </a>
+                </div>
+            </div>
+        }
+
+        <div id="NewAdditional" hidden="hidden">
+            <span class="Title">Add new Additional information</span>
+                <form method="post" asp-action="CreateAdditional" asp-controller="Resumes" asp-route-id="@Model.Resume.ResumeId">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label asp-for="Additionals.AdditionalTitle" class="control-label"></label>
+                        <input asp-for="Additionals.AdditionalTitle" name="AdditionalTitle" class="form-control" />
+                        <span asp-validation-for="Additionals.AdditionalTitle" data-valmsg-for="AdditionalTitle" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Additionals.AdditionalValue" class="control-label"></label>
+                        <input asp-for="Additionals.AdditionalValue" name="AdditionalValue" class="form-control" />
+                        <span asp-validation-for="Additionals.AdditionalValue" data-valmsg-for="AdditionalValue" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Add new" class="btn btn-default" />
+                    </div>
+
+
+                </form>
+
+</div>
+
+        <button id="AddAdditional">Add new entry</button>
+        <hr />
+
+
+        <div>
+            <a asp-action="Index" asp-controller="Home">Back to List</a>
+        </div>
+    </div>
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+
+            $('#AddAcademic').click(function () {
+                $("#NewAcademic").toggle();
+                $(this).text(function (i, text) {
+                    return text === "Add new entry" ? "Show less" : "Add new entry"
+                });
+            });
+
+            $("#AddAdditional").click(function () {
+                $("#NewAdditional").toggle();
+                $(this).text(function (i, text) {
+                    return text === "Add new entry" ? "Show less" : "Add new entry"
+                });
+
+            });
+
+            $("#AddJob").click(function () {
+                $("#NewJob").toggle();
+                $(this).text(function (i, text) {
+                    return text === "Add new entry" ? "Show less" : "Add new entry"
+                });
+
+            });
+
+            $('#fileinput').bind('change', function () {
+                if (this.files[0].size / 1024 / 1024 > 5) {
+                    $(".img-validation").text("picture cannot be bigger than 5 MB ");
+                    $("#submitFile").attr("disabled", "disabled");
+
+                } else {
+                    $("#submitFile").removeAttr("disabled");
+                }
+
+            });
+
+
+        });
+
+    </script>
+}
+

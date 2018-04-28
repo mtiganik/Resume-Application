@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "About";
+}
+<h2>@ViewData["Title"]</h2>
+<h3>@ViewData["Message"]</h3>
+
+<p>This is sample application for making Resumes</p>
+
+<p>On front page, click "Create New Resume". Enter first details, save it, then navigate to Details page to add job, additional information, picture and Academic information</p>
+
+<img src="~/images/Relationship_model.jpg" />
+<br />
+<p>Since both Academic and Job model has StartDate and EndDate, I'm using TPH inheritance with Experience model.
+    So in server both Academic and Job are in Experiences table</p>
+<img src="~/images/Conceptual_model.jpg" />
