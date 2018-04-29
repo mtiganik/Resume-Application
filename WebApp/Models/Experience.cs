@@ -19,6 +19,7 @@ namespace WebApp.Models
         [Display(Name = "End Date")]
         public DateTime EndDate { get; set; }
 
+        // If date was long time ago, then only show year. Otherwise show month and year
         [Display(Name = "Time")]
         public string StartToEndDate
         {

@@ -12,12 +12,12 @@ namespace WebApp.Models
 
         [Required]
         [Display(Name = "Title")]
-        [MinLength(3, ErrorMessage = "Title must be 3 - 30 characters long")]
+        [MinLength(3, ErrorMessage = "Title must be 3 - 40 characters long")]
         [MaxLength(40, ErrorMessage = "Title must be 3 - 40 characters long")]
         public string AdditionalTitle { get; set; }
 
         [Display(Name = "Description")]
-        [MinLength(3, ErrorMessage = "Description must be 3 - 60 characters long")]
+        [MinLength(3, ErrorMessage = "Description must be 3 - 70 characters long")]
         [MaxLength(70, ErrorMessage = "Description must be 3 - 70 characters long")]
         public string AdditionalValue { get; set; }
 
