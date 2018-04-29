@@ -18,7 +18,6 @@ namespace WebApp.Models
 
         [Display(Name = "Birth date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateOfBirth { get; set; }
 
         public string Picture { get; set; }
@@ -36,8 +35,19 @@ namespace WebApp.Models
 
         [Display(Name = "Entry added")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public static DateTime EntryAdded { get; set; }
+
+        public int Age { get
+            {
+                int age = DateTime.Now.Year - DateOfBirth.Year;
+                int m = DateTime.Now.Month - DateOfBirth.Month;
+                if(m < 0 || (m == 0 && DateTime.Now.Day < DateOfBirth.Day))
+                {
+                    age--;
+                }
+                return age;
+            }
+        }
 
 
         public List<Job> Jobs { get; set; } = new List<Job>();
