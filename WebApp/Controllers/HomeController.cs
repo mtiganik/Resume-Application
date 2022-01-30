@@ -29,7 +29,7 @@ namespace WebApp.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Homework for NetGroup internship program.";
+            ViewData["Message"] = "Resume Application.";
 
             return View();
         }
